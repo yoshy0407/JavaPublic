@@ -1,0 +1,6 @@
+SELECT
+	*
+FROM
+	SAMPLE_TABLE
+WHERE
+	PRIMARY_KEY <= /*primaryKey*/100

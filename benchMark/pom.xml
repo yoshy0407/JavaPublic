@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.bench.mark</groupId>
+	<artifactId>benchMark</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>benchMark</name>
+	<description>Demo project for Spring Boot</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<seasar.version>2.4.48</seasar.version>
+		<doma.version>2.36.0</doma.version>
+		<doma-spring-boot.version>1.4.0</doma-spring-boot.version>
+		<lombok.version>1.18.12</lombok.version>
+		<oracle.jdbc.version>12.2.0.3.0</oracle.jdbc.version>
+		<HikariCP.version>3.4.5</HikariCP.version>
+		<jmh.version>1.23</jmh.version>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>mave.seasar.org</id>
+			<name>The Seasar Foundation Maven Repository</name>
+			<url>http://maven.seasar.org/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<dependencies>		
+		<!-- for S2JDBC -->
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>javax.persistence-api</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seasar.container</groupId>
+			<artifactId>s2-framework</artifactId>
+			<version>${seasar.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seasar.container</groupId>
+			<artifactId>s2-extension</artifactId>
+			<version>${seasar.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seasar.container</groupId>
+			<artifactId>s2-tiger</artifactId>
+			<version>${seasar.version}</version>
+		</dependency>
+		
+		<!--  for Doma -->
+		<dependency>
+			<groupId>org.seasar.doma</groupId>
+			<artifactId>doma-core</artifactId>
+			<version>${doma.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seasar.doma</groupId>
+			<artifactId>doma-processor</artifactId>
+			<version>${doma.version}</version>
+		</dependency>
+		
+		<!-- lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+		</dependency>
+		<!-- HIkariCP -->
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>${HikariCP.version}</version>
+		</dependency>
+		<!-- oracle jdbc driver -->
+		<!-- 
+		<dependency>
+			<groupId>oracle</groupId>
+			<artifactId>ojdbc8</artifactId>
+			<version>${oracle.jdbc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>oracle</groupId>
+			<artifactId>orai18n</artifactId>
+			<version>${oracle.jdbc.version}</version>
+		</dependency>
+		 -->
+		<!-- JMH -->
+		<dependency>
+    		<groupId>org.openjdk.jmh</groupId>
+    		<artifactId>jmh-core</artifactId>
+    		<version>${jmh.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjdk.jmh</groupId>
+			<artifactId>jmh-generator-annprocess</artifactId>
+			<version>${jmh.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>benchMark</finalName>
+		<plugins>
+			<plugin>
+            	<groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+            	<artifactId>maven-shade-plugin</artifactId>
+            	<version>3.0.0</version>
+            	<executions>
+                	<execution>
+                    	<phase>package</phase>
+                    	<goals>
+                        	<goal>shade</goal>
+                    	</goals>
+                   		<configuration>
+                        	<finalName>/benchMark</finalName>
+                        	<transformers>
+                            	<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                	<mainClass>org.openjdk.jmh.Main</mainClass>
+                            	</transformer>
+                        	</transformers>
+                        	<filters>
+                            	<filter>
+                                	<artifact>*:*</artifact>
+                                	<excludes>
+                                    	<exclude>META-INF/*.SF</exclude>
+                                    	<exclude>META-INF/*.DSA</exclude>
+                                    	<exclude>META-INF/*.RSA</exclude>
+                                	</excludes>
+                            	</filter>
+                        	</filters>
+                    	</configuration>
+                	</execution>
+            	</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

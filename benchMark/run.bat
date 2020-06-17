@@ -1,0 +1,1 @@
+java -Xms3072m -Xmx3072m -jar target/benchMark.jar
